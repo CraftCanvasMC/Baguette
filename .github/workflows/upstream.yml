@@ -113,7 +113,7 @@ jobs:
         run: |
           gh issue create \
             --title "[BOT] Failed to apply Baguette patches" \
-            --body "Failed to apply patches after updating Canvas to $CANVAS_COMMIT" \
+            --body "Failed to apply patches after updating Canvas to $LATEST_CANVAS_COMMIT" \
     
       - name: Create an issue if build failed
         if: env.BUILD_FAILED == 'true' && env.SKIP_WORKFLOW == 'false'
