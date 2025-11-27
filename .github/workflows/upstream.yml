@@ -120,7 +120,7 @@ jobs:
         run: |
           gh issue create \
             --title "[BOT] Failed to build Baguette" \
-            --body "Failed to build after updating Canvas to $CANVAS_COMMIT" \
+            --body "Failed to build after updating Canvas to $LATEST_CANVAS_COMMIT" \
 
       - name: Generate commit description
         if: env.BUILD_FAILED != 'true' && env.APPLY_FAILED != 'true' && env.SKIP_WORKFLOW == 'false'
