@@ -13,7 +13,7 @@ jobs:
       FILE_PATH: "build.gradle.kts"
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Authenticate
         run: |
@@ -38,23 +38,35 @@ jobs:
             echo "SKIP_WORKFLOW=false" >> $GITHUB_ENV
           fi
 
-      - name: Fetch upstream weaver version
-        id: plugin
+      - name: Fetch upstream and local Weaver versions
+        id: weaver_versions
         if: env.SKIP_WORKFLOW == 'false'
         run: |
-          VERSION=$(curl -s -H "Accept: application/vnd.github.v3.raw" \
-            https://raw.githubusercontent.com/CraftCanvasMC/Canvas/HEAD/build.gradle.kts \
-            | grep "$PLUGIN_ID" \
-            | awk -F 'version ' '{print $2}' \
-            | tr -d '" ')
-          echo "WEAVER_VERSION=$VERSION" >> $GITHUB_ENV
-          echo "Latest Weaver version: $VERSION"
+          UPSTREAM_GRADLE=$(curl -s -H "Accept: application/vnd.github.v3.raw" \
+            https://raw.githubusercontent.com/CraftCanvasMC/Canvas/HEAD/build.gradle.kts)
+
+          UPSTREAM_WEAVER_VERSION=$(echo "$UPSTREAM_GRADLE" | \
+            grep "$PLUGIN_ID" | \
+            sed -E 's/.*version "([^"]+)".*/\1/' | \
+            tr -d '[:space:]\r' | \
+            head -n1)
+
+          LOCAL_WEAVER_VERSION=$(grep "$PLUGIN_ID" "$FILE_PATH" | \
+            sed -E 's/.*version "([^"]+)".*/\1/' | \
+            tr -d '[:space:]\r' | \
+            head -n1)
+
+          echo "UPSTREAM_WEAVER_VERSION=$UPSTREAM_WEAVER_VERSION" >> $GITHUB_ENV
+          echo "LOCAL_WEAVER_VERSION=$LOCAL_WEAVER_VERSION" >> $GITHUB_ENV
+
+          echo "Local Weaver version: $LOCAL_WEAVER_VERSION"
+          echo "Upstream Weaver version: $UPSTREAM_WEAVER_VERSION"
 
       - name: Update weaver version
-        if: env.SKIP_WORKFLOW == 'false'
+        if: env.SKIP_WORKFLOW == 'false' && env.UPSTREAM_WEAVER_VERSION != env.LOCAL_WEAVER_VERSION && env.UPSTREAM_WEAVER_VERSION != ''
         run: |
-          echo "Updating weaver-patcher to $WEAVER_VERSION in $FILE_PATH"
-          sed -i -E "s/(id\\(\"$PLUGIN_ID\"\\) version \")[^\"]+\"/\1$WEAVER_VERSION\"/" $FILE_PATH
+          echo "Updating weaver-patcher from $LOCAL_WEAVER_VERSION to $UPSTREAM_WEAVER_VERSION in $FILE_PATH"
+          sed -i -E "s/(id\\(\"$PLUGIN_ID\"\\)[^\"]*version \")[^\"]+(\")/\1$UPSTREAM_WEAVER_VERSION\2/" "$FILE_PATH"
 
       - name: Update canvas refs
         id: upstream_refs
@@ -63,10 +75,11 @@ jobs:
           UPSTREAM_FILE=$(curl -s https://raw.githubusercontent.com/CraftCanvasMC/Canvas/HEAD/gradle.properties)
           
           UPSTREAM_MC_VERSION=$(echo "$UPSTREAM_FILE" | grep '^mcVersion' | awk -F '=' '{print $2}' | tr -d ' ')
+          UPSTREAM_API_VERSION=$(echo "$UPSTREAM_FILE" | grep '^apiVersion' | awk -F '=' '{print $2}' | tr -d ' ')
           UPSTREAM_VERSION=$(echo "$UPSTREAM_FILE" | grep '^version' | awk -F '=' '{print $2}' | tr -d ' ')
           echo "UPSTREAM_MC_VERSION=$UPSTREAM_MC_VERSION" >> $GITHUB_ENV
+          echo "UPSTREAM_API_VERSION=$UPSTREAM_API_VERSION" >> $GITHUB_ENV
           echo "UPSTREAM_VERSION=$UPSTREAM_VERSION" >> $GITHUB_ENV
-          echo "Upstream mcVersion: $UPSTREAM_MC_VERSION, version: $UPSTREAM_VERSION"
 
           echo "Latest Canvas commit: $LATEST_CANVAS_COMMIT"
 
@@ -74,34 +87,39 @@ jobs:
           sed -i -E "s/^(canvasCommit = ).*$/\1$LATEST_CANVAS_COMMIT/" gradle.properties
 
           CURRENT_MC_VERSION=$(grep '^mcVersion' gradle.properties | awk -F '=' '{print $2}' | tr -d ' ')
+          CURRENT_API_VERSION=$(grep '^apiVersion' gradle.properties | awk -F '=' '{print $2}' | tr -d ' ')
           if [ "$CURRENT_MC_VERSION" != "$UPSTREAM_MC_VERSION" ]; then
-            echo "Updating mcVersion from $CURRENT_MC_VERSION to $UPSTREAM_MC_VERSION"
+            echo "Updating mcVersion & apiVersion from $CURRENT_MC_VERSION , $CURRENT_API_VERSION to $UPSTREAM_MC_VERSION , $UPSTREAM_API_VERSION"
             sed -i -E "s/^(mcVersion = ).*$/\1$UPSTREAM_MC_VERSION/" gradle.properties
+            sed -i -E "s/^(apiVersion = ).*$/\1$UPSTREAM_API_VERSION/" gradle.properties
 
             CURRENT_VERSION=$(grep '^version' gradle.properties | awk -F '=' '{print $2}' | tr -d ' ')
             echo "Updating version from $CURRENT_VERSION to $UPSTREAM_VERSION"
             sed -i -E "s/^(version = ).*$/\1$UPSTREAM_VERSION/" gradle.properties
           else
-            echo "mcVersion is already up-to-date ($CURRENT_MC_VERSION), version remains unchanged"
+            echo "mcVersion is already up-to-date ($CURRENT_MC_VERSION), [api]version remains unchanged"
           fi
 
-      - name: JDK 21
-        uses: actions/setup-java@v4
+      - name: JDK 25
+        uses: actions/setup-java@v5
         if: env.SKIP_WORKFLOW == 'false'
         with:
-          java-version: 21
+          java-version: 25
           distribution: 'zulu'
 
       - name: Setup Gradle
         if: env.SKIP_WORKFLOW == 'false'
-        uses: gradle/actions/setup-gradle@v4
+        uses: gradle/actions/setup-gradle@v5
 
       - name: Run Gradle build
         id: build
         if: env.SKIP_WORKFLOW == 'false'
         run: |
-          ./gradlew applyAllPatches || echo "APPLY_FAILED=true" >> $GITHUB_ENV
+          ./gradlew applyAllPatches
+          ./gradlew applyCanvasSingleFilePatchesFuzzy
           ./gradlew rebuildCanvasSingleFilePatches
+          # We apply twice here in case build files conflict, before reporting apply as failed
+          ./gradlew applyAllPatches || echo "APPLY_FAILED=true" >> $GITHUB_ENV
           ./gradlew rebuildPaperApiPatches
           ./gradlew rebuildFoliaApiPatches
           ./gradlew rebuildAllServerPatches
