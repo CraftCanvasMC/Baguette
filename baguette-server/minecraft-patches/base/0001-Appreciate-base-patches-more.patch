@@ -1,6 +1,6 @@
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Toffikk <slodkitofik@gmail.com>
-Date: Thu, 24 Jul 2025 21:31:11 +0200
+Date: Sat, 20 Dec 2025 23:19:08 +0100
 Subject: [PATCH] Appreciate base patches more
 
 This is an example base patch.
@@ -19,14 +19,14 @@ Base patches benefit mostly forks which would for example want to pull other for
 They can also be used the same way as in the upstream project (canvas) for involving changes that you wish to be made before your actual code changes so you can use per-file patches safely without worrying about patch clutter from changes that modify hundreds of files.
 
 diff --git a/net/minecraft/server/MinecraftServer.java b/net/minecraft/server/MinecraftServer.java
-index 2e5af8eafe549e5316ef383955cd08f26fbb49c7..f28fcb30a4c00537a0168791a97854b5fab1e174 100644
+index ff85ff9440a996df873e88f6c1608975dd6f5f3c..12e45f4a0ae5eaa2b6e6794035d7dbceacff9721 100644
 --- a/net/minecraft/server/MinecraftServer.java
 +++ b/net/minecraft/server/MinecraftServer.java
-@@ -547,6 +547,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
-                 java.io.File oldLevelDat = new java.io.File(new java.io.File(levelId), "level.dat"); // The data folders exist on first run as they are created in the PersistentCollection constructor above, but the level.dat won't
- 
-                 if (!newWorld.isDirectory() && oldWorld.isDirectory() && oldLevelDat.isFile()) {
-+                    MinecraftServer.LOGGER.info("hey base patch enjoyer!"); // Baguette - appreciate base patches more
-                     MinecraftServer.LOGGER.info("---- Migration of old " + worldType + " folder required ----");
-                     MinecraftServer.LOGGER.info("Unfortunately due to the way that Minecraft implemented multiworld support in 1.6, Bukkit requires that you move your " + worldType + " folder to a new location in order to operate correctly.");
-                     MinecraftServer.LOGGER.info("We will move this folder for you, but it will mean that you need to move it back should you wish to stop using Bukkit in the future.");
+@@ -1333,6 +1333,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
+             // Paper start - Add onboarding message for initial server start
+             if (io.papermc.paper.configuration.GlobalConfiguration.isFirstStart) {
+                 LOGGER.info("*************************************************************************************");
++                LOGGER.info("Hey base patch enjoyer!"); // Baguette - appreciate base patches more
+                 LOGGER.info("This is the first time you're starting this server.");
+                 LOGGER.info("It's recommended you read our 'Getting Started' documentation for guidance.");
+                 LOGGER.info("View this and more helpful information here: https://docs.papermc.io/paper/next-steps");

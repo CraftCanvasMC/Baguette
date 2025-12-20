@@ -1,6 +1,6 @@
 --- a/canvas-server/build.gradle.kts
 +++ b/canvas-server/build.gradle.kts
-@@ -56,7 +_,30 @@
+@@ -51,7 +_,30 @@
          }
      }
  
@@ -32,7 +32,7 @@
  
  
      spigot {
-@@ -146,12 +_,16 @@
+@@ -142,12 +_,16 @@
          resources { srcDir("../paper-server/src/main/resources") }
          java { srcDir("../folia-server/src/main/java") }
          resources { srcDir("../folia-server/src/main/resources") }
@@ -49,16 +49,16 @@
      }
  }
  val log4jPlugins = sourceSets.create("log4jPlugins") {
-@@ -178,7 +_,7 @@
+@@ -175,7 +_,7 @@
  }
  
  dependencies {
 -    implementation(projects.canvasApi)
 +    implementation(projects.baguetteApi)
-     implementation("ca.spottedleaf:concurrentutil:0.0.3")
+     implementation("ca.spottedleaf:concurrentutil:0.0.7")
      implementation("org.jline:jline-terminal-ffm:3.29.0") // use ffm on java 22+
      implementation("org.jline:jline-terminal-jni:3.29.0") // fall back to jni on java 21
-@@ -266,14 +_,14 @@
+@@ -250,14 +_,14 @@
          val gitBranch = git.exec(providers, "rev-parse", "--abbrev-ref", "HEAD").get().trim()
          attributes(
              "Main-Class" to "org.bukkit.craftbukkit.Main",
