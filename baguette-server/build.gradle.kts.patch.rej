@@ -1,0 +1,11 @@
+++++ REJECTED HUNK: 3
+@@ -175,7 +202,7 @@
+ }
+ 
+ dependencies {
+-    implementation(projects.canvasApi)
++    implementation(projects.baguetteApi)
+     implementation("ca.spottedleaf:concurrentutil:0.0.7")
+     implementation("org.jline:jline-terminal-ffm:3.29.0") // use ffm on java 22+
+     implementation("org.jline:jline-terminal-jni:3.29.0") // fall back to jni on java 21
+++++ END HUNK
