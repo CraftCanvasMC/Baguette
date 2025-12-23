@@ -8,7 +8,7 @@ import io.papermc.paperweight.tasks.CreatePublisherJar
 
 plugins {
     java
-    id("io.canvasmc.weaver.patcher") version "2.3.10" // always keep in check with canvas's actual used release
+    id("io.canvasmc.weaver.patcher") version "2.3.12-SNAPSHOT" // always keep in check with canvas's actual used release
 }
 
 val paperMavenPublicUrl = "https://repo.papermc.io/repository/maven-public/"
