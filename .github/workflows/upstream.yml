@@ -114,8 +114,7 @@ jobs:
         id: build
         if: env.SKIP_WORKFLOW == 'false'
         run: |
-          ./gradlew applyAllPatches
-          ./gradlew applyCanvasSingleFilePatchesFuzzy
+          ./gradlew applyAllPatches || ./gradlew applyCanvasSingleFilePatchesFuzzy || echo "APPLY_FAILED=true" >> $GITHUB_ENV
           ./gradlew rebuildCanvasSingleFilePatches
           # We apply twice here in case build files conflict, before reporting apply as failed
           ./gradlew applyAllPatches || echo "APPLY_FAILED=true" >> $GITHUB_ENV
