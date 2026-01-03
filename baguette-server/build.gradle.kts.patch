@@ -1,6 +1,6 @@
 --- a/canvas-server/build.gradle.kts
 +++ b/canvas-server/build.gradle.kts
-@@ -51,7 +_,30 @@
+@@ -49,7 +_,27 @@
          }
      }
  
@@ -10,20 +10,17 @@
 +         upstream.patchRepo("paperServer") {
 +             upstreamRepo = canvas.patchedRepo("paperServer")
 +             patchesDir = rootDirectory.dir("baguette-server/paper-patches")
-+             additionalAts = rootDirectory.file("build-data/baguette-paperserver.at")
 +             outputDir = rootDirectory.dir("paper-server")
 +        }
 +         upstream.patchRepo("foliaServer") {
 +             upstreamRepo = canvas.patchedRepo("foliaServer")
 +             patchesDir = rootDirectory.dir("baguette-server/folia-patches")
-+             additionalAts = rootDirectory.file("build-data/baguette-foliaserver.at")
 +             outputDir = rootDirectory.dir("folia-server")
 +        }
 +        upstream.patchDir("canvasServer") {
 +            upstreamPath = "canvas-server"
 +            excludes = setOf("src/minecraft", "paper-patches", "folia-patches", "minecraft-patches", "build.gradle.kts", "build.gradle.kts.patch")
 +            patchesDir = rootDirectory.dir("baguette-server/canvas-patches")
-+            additionalAts = rootDirectory.file("build-data/baguette-canvasserver.at")
 +            outputDir = rootDirectory.dir("canvas-server")
 +        }
 +    }
@@ -32,7 +29,7 @@
  
  
      spigot {
-@@ -142,12 +_,16 @@
+@@ -140,12 +_,16 @@
          resources { srcDir("../paper-server/src/main/resources") }
          java { srcDir("../folia-server/src/main/java") }
          resources { srcDir("../folia-server/src/main/resources") }
@@ -49,7 +46,7 @@
      }
  }
  val log4jPlugins = sourceSets.create("log4jPlugins") {
-@@ -175,7 +_,7 @@
+@@ -173,7 +_,7 @@
  }
  
  dependencies {
@@ -58,7 +55,7 @@
      implementation("ca.spottedleaf:concurrentutil:0.0.8")
      implementation("org.jline:jline-terminal-ffm:3.29.0") // use ffm on java 22+
      implementation("org.jline:jline-terminal-jni:3.29.0") // fall back to jni on java 21
-@@ -249,14 +_,14 @@
+@@ -247,14 +_,14 @@
          val gitBranch = git.exec(providers, "rev-parse", "--abbrev-ref", "HEAD").get().trim()
          attributes(
              "Main-Class" to "org.bukkit.craftbukkit.Main",

@@ -8,7 +8,7 @@ import io.papermc.paperweight.tasks.CreatePublisherJar
 
 plugins {
     java
-    id("io.canvasmc.weaver.patcher") version "2.3.12-SNAPSHOT" // always keep in check with canvas's actual used release
+    id("io.canvasmc.weaver.patcher") version "2.3.12" // always keep in check with canvas's actual used release
 }
 
 val paperMavenPublicUrl = "https://repo.papermc.io/repository/maven-public/"
@@ -30,26 +30,22 @@ paperweight {
         patchRepo("paperApi") {
             upstreamPath = "paper-api"
             patchesDir = file("baguette-api/paper-patches")
-            additionalAts = file("build-data/baguette-paperapi.at") // custom at for paper-api sources
-            // This line above and the relevant lines below allow us to specify ATs for non-minecraft sources thanks to weaver.
-            // You can set all relevant lines here and in the server build file to the same at file eg. `baguette.at`, however doing that is *discouraged*
-            // due to us possibly enabling AT validation in the future, which would result in errors when an AT cannot apply.
-            // Setting each patch set to have its own AT file is good practice and should futureproof you from any inconveniences further down the line, should we change anything.
-            // If additionalAts is not specified, weaver *won't* fallback to the general AT file due to the aforementioned reasons
+            // Thanks to weaver, you can also use ATs for all sources, not just the minecraft one.
+            // By default, when weaver is looking for an AT file for a patch source set, it looks under the `build-data` dir for an AT file under the name of the patch set.
+            // For this patchRepo, it would look for paperApi.at because 'paperApi` is the name of the source set, as declared in the `patchRepo("paperApi")` field.
+            // If you want to override either the location of build-data dir or the at file itself you can do so by modifying the `buildDataDir` and/or `additionalAts` fields.
             // An important behavior change compared to paperweight in regards to the minecraft AT file is the added possibility to specify ats for libraries instead of having to patch them manually.
             outputDir = file("paper-api")
         }
         patchRepo("foliaApi") {
             upstreamPath = "folia-api"
             patchesDir = file("baguette-api/folia-patches")
-            additionalAts = file("build-data/baguette-foliaapi.at") // custom at for folia-api sources
             outputDir = file("folia-api")
         }
         patchDir("canvasApi") {
             upstreamPath = "canvas-api"
             excludes = listOf("build.gradle.kts", "build.gradle.kts.patch", "paper-patches", "folia-patches")
             patchesDir = file("baguette-api/canvas-patches")
-            additionalAts = file("build-data/baguette-canvasapi.at") // custom at for canvas-api sources
             outputDir = file("canvas-api")
 	}
     }

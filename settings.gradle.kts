@@ -3,7 +3,6 @@ import java.util.Locale
 pluginManagement {
     repositories {
         gradlePluginPortal()
-        maven("https://maven.canvasmc.io/snapshots") // TODO: remove me when switching to stable weaver
         maven("https://maven.canvasmc.io/releases")
     }
 }
