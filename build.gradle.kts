@@ -47,7 +47,7 @@ paperweight {
             excludes = listOf("build.gradle.kts", "build.gradle.kts.patch", "paper-patches", "folia-patches")
             patchesDir = file("baguette-api/canvas-patches")
             outputDir = file("canvas-api")
-	}
+	    }
     }
 }
 
