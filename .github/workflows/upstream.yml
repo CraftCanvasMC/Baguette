@@ -11,6 +11,7 @@ jobs:
     env:
       PLUGIN_ID: "io.canvasmc.weaver.patcher"
       FILE_PATH: "build.gradle.kts"
+      UPSTREAM_BRANCH: "ver/1.21.11"
     steps:
       - name: Checkout repo
         uses: actions/checkout@v6
@@ -26,7 +27,7 @@ jobs:
         run: |
           ISSUE=$(gh issue list --author baguette-maintainer-bot --state open --json number --jq '.[0].number // empty')
           CURRENT_CANVAS_COMMIT=$(grep '^canvasCommit' gradle.properties | awk -F '=' '{print $2}' | tr -d '[:space:]' | tr -d '\r')
-          LATEST_CANVAS_COMMIT=$(curl -s https://api.github.com/repos/CraftCanvasMC/Canvas/commits/ver/1.21.11 | jq -r '.sha' | tr -d '[:space:]' | tr -d '\r')
+          LATEST_CANVAS_COMMIT=$(curl -s https://api.github.com/repos/CraftCanvasMC/Canvas/commits/$UPSTREAM_BRANCH | jq -r '.sha' | tr -d '[:space:]' | tr -d '\r')
 
           echo "ISSUE=$ISSUE" >> $GITHUB_ENV
           echo "CURRENT_CANVAS_COMMIT=$CURRENT_CANVAS_COMMIT" >> $GITHUB_ENV
@@ -43,7 +44,7 @@ jobs:
         if: env.SKIP_WORKFLOW == 'false'
         run: |
           UPSTREAM_GRADLE=$(curl -s -H "Accept: application/vnd.github.v3.raw" \
-            https://raw.githubusercontent.com/CraftCanvasMC/Canvas/ver/1.21.11/build.gradle.kts)
+            https://raw.githubusercontent.com/CraftCanvasMC/Canvas/$UPSTREAM_BRANCH/build.gradle.kts)
 
           UPSTREAM_WEAVER_VERSION=$(echo "$UPSTREAM_GRADLE" | \
             grep "$PLUGIN_ID" | \
@@ -72,7 +73,7 @@ jobs:
         id: upstream_refs
         if: env.SKIP_WORKFLOW == 'false'
         run: |
-          UPSTREAM_FILE=$(curl -s https://raw.githubusercontent.com/CraftCanvasMC/Canvas/ver/1.21.11/gradle.properties)
+          UPSTREAM_FILE=$(curl -s https://raw.githubusercontent.com/CraftCanvasMC/Canvas/$UPSTREAM_BRANCH/gradle.properties)
           UPSTREAM_MC_VERSION=$(echo "$UPSTREAM_FILE" | grep '^mcVersion' | awk -F '=' '{print $2}' | tr -d ' ')
           UPSTREAM_API_VERSION=$(echo "$UPSTREAM_FILE" | grep '^apiVersion' | awk -F '=' '{print $2}' | tr -d ' ')
           UPSTREAM_VERSION=$(echo "$UPSTREAM_FILE" | grep '^version' | awk -F '=' '{print $2}' | tr -d ' ')
