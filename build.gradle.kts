@@ -14,6 +14,11 @@ plugins {
 val paperMavenPublicUrl = "https://repo.papermc.io/repository/maven-public/"
 
 paperweight {
+    // This controls the patch filtering setting
+    // It controls whether empty patches should be deleted automatically or kept
+    // the default value is true but it can sometimes break git's 3way apply in rare cases, so it's left configurable
+    // NOTE: this option is duplicated in the server build file, so make sure to set it to what you like too. What you set here doesn't get respected there automatically.
+    filterPatches = true
     upstreams.canvas {
         ref = providers.gradleProperty("canvasCommit")
 
@@ -90,17 +95,9 @@ subprojects {
         }
     }
 }
-allprojects {
-    // This block controls the patch filtering setting
-    // It controls whether empty patches should be deleted automatically or kept
-    // the default value is true but it can sometimes break git's 3way apply in rare cases, so it's left configurable
-    tasks.withType<RebuildBaseGitPatches>().configureEach {
-        filterPatches = true
-    }
-    tasks.withType<RebuildGitPatches>().configureEach {
-        filterPatches = true
-    }
 
+// DEPRECATED; possibly for future removal
+allprojects {
     // This block on the other hand showcases how to enable an opt-in property which changes the way base and feature patches apply.
     // By default when there are any apply conflicts, the patch fails to apply *completely* and doesn't continue the apply.
     // The `emitRejects` property allows to change this behaviour to make it instead *always* continue the apply, even when most hunks didn't apply
@@ -116,20 +113,3 @@ allprojects {
         emitRejects = false
     }
 }
-
-// Weaver also provides an useful `create(Mojmap/Reobf)PublisherJar` task which generates a paperclip jar with the build number or whatever input you give it
-// The default output of the task is determined as follows: `[project name lowercase]-build.[the build number or local when there's none].jar`
-// Following that, we can deduct that the name for our Baguette fork would be either `baguette-build.1.jar` or `baguette-build.local.jar` when there's no `BUILD_NUMBER` environment variable set
-// An example *custom* configuration is shown here
-/*
-// custom input for publisherJar
-val buildNumber = providers.environmentVariable("BUILD_NUM").orElse("no-build")
-val jarName = buildNumber.map { build -> "libs/output-$build-test.jar" }
-
-subprojects {
-    tasks.withType<CreatePublisherJar>().configureEach {
-        outputZip.set(layout.buildDirectory.file(jarName))
-    }
-}
-*/
-
