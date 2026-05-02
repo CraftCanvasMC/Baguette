@@ -1,14 +1,9 @@
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
-import io.papermc.paperweight.core.tasks.patching.ApplyBasePatches
-import io.papermc.paperweight.core.tasks.patching.ApplyFeaturePatches
-import io.papermc.paperweight.tasks.RebuildBaseGitPatches
-import io.papermc.paperweight.tasks.RebuildGitPatches
-import io.papermc.paperweight.tasks.CreatePublisherJar
 
 plugins {
     java
-    id("io.canvasmc.weaver.patcher") version "2.3.12" // always keep in check with canvas's actual used release
+    id("io.canvasmc.weaver.patcher") version "2.4.3" // always keep in check with canvas's actual used release
 }
 
 val paperMavenPublicUrl = "https://repo.papermc.io/repository/maven-public/"
@@ -62,7 +57,7 @@ subprojects {
 
     extensions.configure<JavaPluginExtension> {
         toolchain {
-            languageVersion = JavaLanguageVersion.of(21)
+            languageVersion = JavaLanguageVersion.of(25)
         }
     }
 
@@ -71,13 +66,9 @@ subprojects {
         maven(paperMavenPublicUrl)
     }
 
-    tasks.withType<AbstractArchiveTask>().configureEach {
-        isPreserveFileTimestamps = false
-        isReproducibleFileOrder = true
-    }
     tasks.withType<JavaCompile>().configureEach {
         options.encoding = Charsets.UTF_8.name()
-        options.release = 21
+        options.release = 25
         options.isFork = true
         options.compilerArgs.addAll(listOf("-Xlint:-deprecation", "-Xlint:-removal"))
     }
@@ -93,23 +84,5 @@ subprojects {
             exceptionFormat = TestExceptionFormat.FULL
             events(TestLogEvent.STANDARD_OUT)
         }
-    }
-}
-
-// DEPRECATED; possibly for future removal
-allprojects {
-    // This block on the other hand showcases how to enable an opt-in property which changes the way base and feature patches apply.
-    // By default when there are any apply conflicts, the patch fails to apply *completely* and doesn't continue the apply.
-    // The `emitRejects` property allows to change this behaviour to make it instead *always* continue the apply, even when most hunks didn't apply
-    // and leaves the repository in a partially applied state, while emitting `.rej` files which contain failed hunks, each named by the file the failed hunk was modifying
-    // This behaviour can be useful in case you have a lot of involving patches that break on upstream updates frequently, so this way everything that can apply, gets applied and the unapplied parts
-    // are emitted as .rej files, you can apply manually and then continue the `git am` session after you've done the manual apply
-    // There are also more verbose details provided in the log file, such as the exact code snippets; see the console output on where to find it
-    // note: it is important you *don't* forget to remove the leftover `.rej` files as they WILL be added to your patch when you use `git add .` if you don't remove them
-    tasks.withType<ApplyBasePatches>().configureEach {
-        emitRejects = false
-    }
-    tasks.withType<ApplyFeaturePatches>().configureEach {
-        emitRejects = false
     }
 }

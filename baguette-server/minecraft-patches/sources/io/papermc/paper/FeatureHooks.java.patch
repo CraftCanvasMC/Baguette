@@ -1,6 +1,6 @@
 --- a/io/papermc/paper/FeatureHooks.java
 +++ b/io/papermc/paper/FeatureHooks.java
-@@ -33,6 +_,15 @@
+@@ -32,6 +_,15 @@
  
  public final class FeatureHooks {
  
@@ -14,5 +14,5 @@
 +    }
 +    // Baguette end - we never stop appreciating baguettes
      // this includes non-accessible entities
-     public static Iterable<Entity> getAllEntities(final net.minecraft.server.level.ServerLevel world) {
-         return ((ca.spottedleaf.moonrise.patches.chunk_system.level.entity.EntityLookup)world.getEntities()).getAllMapped(); // Paper - rewrite chunk system
+     public static Iterable<Entity> getAllEntities(final net.minecraft.server.level.ServerLevel level) {
+         return ((ca.spottedleaf.moonrise.patches.chunk_system.level.entity.EntityLookup)level.getEntities()).getAllMapped(); // Paper - rewrite chunk system

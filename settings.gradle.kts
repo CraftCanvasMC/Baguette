@@ -19,3 +19,15 @@ for (name in listOf("baguette-api", "baguette-server")) {
     include(projName)
     findProject(":$projName")!!.projectDir = file(name)
 }
+
+gradle.lifecycle.beforeProject {
+    val mcVersion = providers.gradleProperty("mcVersion").get().trim()
+    val baguetteChannel = providers.gradleProperty("channel").get().trim()
+    val baguetteBuildNumber = providers.environmentVariable("BUILD_NUMBER").orNull?.trim()?.toInt()
+    val versionString = if (baguetteBuildNumber == null) {
+        "$mcVersion.local-SNAPSHOT"
+    } else {
+        "$mcVersion.build.$baguetteBuildNumber-${baguetteChannel.lowercase()}"
+    }
+    version = versionString
+}

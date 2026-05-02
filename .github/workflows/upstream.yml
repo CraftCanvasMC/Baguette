@@ -11,7 +11,7 @@ jobs:
     env:
       PLUGIN_ID: "io.canvasmc.weaver.patcher"
       FILE_PATH: "build.gradle.kts"
-      UPSTREAM_BRANCH: "ver/1.21.11"
+      UPSTREAM_BRANCH: "ver/26.1.2"
     steps:
       - name: Checkout repo
         uses: actions/checkout@v6
@@ -109,7 +109,7 @@ jobs:
 
       - name: Setup Gradle
         if: env.SKIP_WORKFLOW == 'false'
-        uses: gradle/actions/setup-gradle@v5
+        uses: gradle/actions/setup-gradle@v6
 
       - name: Run Gradle build
         id: build
@@ -131,7 +131,7 @@ jobs:
           gh issue create \
             --title "[BOT] Failed to apply Baguette patches" \
             --body "Failed to apply patches after updating Canvas to $LATEST_CANVAS_COMMIT" \
-    
+
       - name: Create an issue if build failed
         if: env.BUILD_FAILED == 'true' && env.SKIP_WORKFLOW == 'false'
         run: |
@@ -151,7 +151,7 @@ jobs:
           COMMIT_MESSAGE="Updated upstream (Canvas)\n\n${DISCLAIMER}\n\nCanvas Changes:\n${UPDATES}"
 
           echo -e "$COMMIT_MESSAGE" > commit_message.txt
-  
+
       - name: Commit changes
         if: env.BUILD_FAILED != 'true' && env.APPLY_FAILED != 'true' && env.SKIP_WORKFLOW == 'false'
         run: |

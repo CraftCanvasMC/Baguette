@@ -5,7 +5,7 @@ Subject: [PATCH] feature panic
 
 
 diff --git a/net/minecraft/CrashReport.java b/net/minecraft/CrashReport.java
-index ad10eda79e6b76fc1896b4cdb27546b515d1cfa4..5e9cfc214cdae351e58e7593280b40ce074134ef 100644
+index 84247ddc9e063676c59a6e62da1eb919320bd18f..2ab6f09035a910c4f1c57b74818bba48102bc056 100644
 --- a/net/minecraft/CrashReport.java
 +++ b/net/minecraft/CrashReport.java
 @@ -219,6 +219,6 @@ public class CrashReport {
