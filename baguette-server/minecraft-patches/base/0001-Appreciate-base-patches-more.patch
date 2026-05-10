@@ -19,7 +19,7 @@ Base patches benefit mostly forks which would for example want to pull other for
 They can also be used the same way as in the upstream project (canvas) for involving changes that you wish to be made before your actual code changes so you can use per-file patches safely without worrying about patch clutter from changes that modify hundreds of files.
 
 diff --git a/net/minecraft/server/MinecraftServer.java b/net/minecraft/server/MinecraftServer.java
-index d66dbb9c08e890de6bd9ab629b4e3b0fafe740a3..f095433ec590efad1a1f053998d2c737903102e6 100644
+index 50ee67647c486a3071ea1c33721280087c0c2a06..936c2480d882b954c543458c265686f2c6a7bb52 100644
 --- a/net/minecraft/server/MinecraftServer.java
 +++ b/net/minecraft/server/MinecraftServer.java
 @@ -1362,6 +1362,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
