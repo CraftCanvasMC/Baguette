@@ -7,6 +7,7 @@ plugins {
 }
 
 val paperMavenPublicUrl = "https://repo.papermc.io/repository/maven-public/"
+val canvasMavenPublicUrl = "https://maven.canvasmc.io/public/"
 
 paperweight {
     // This controls the patch filtering setting
@@ -64,6 +65,7 @@ subprojects {
     repositories {
         mavenCentral()
         maven(paperMavenPublicUrl)
+        maven(canvasMavenPublicUrl)
     }
 
     tasks.withType<JavaCompile>().configureEach {
