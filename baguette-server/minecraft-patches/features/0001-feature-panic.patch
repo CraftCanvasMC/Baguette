@@ -5,10 +5,10 @@ Subject: [PATCH] feature panic
 
 
 diff --git a/net/minecraft/CrashReport.java b/net/minecraft/CrashReport.java
-index 84247ddc9e063676c59a6e62da1eb919320bd18f..2ab6f09035a910c4f1c57b74818bba48102bc056 100644
+index effd79d743d17db2a9f852c8bf3c97666b9ac40f..4557e132677e00866997d136129c913b1bae5d94 100644
 --- a/net/minecraft/CrashReport.java
 +++ b/net/minecraft/CrashReport.java
-@@ -219,6 +219,6 @@ public class CrashReport {
+@@ -216,6 +216,6 @@ public class CrashReport {
  
      public static void preload() {
          //MemoryReserve.allocate(); // Paper - Disable memory reserve allocating
