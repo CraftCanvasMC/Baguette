@@ -4,7 +4,7 @@
  
      private static final String BRAND_PAPER_NAME = "Paper";
      private static final String BRAND_CANVAS_NAME = "Canvas"; // Canvas - Rebrand
-+    private static final String BRAND_BAGUETTE_NAME = "Baguette";
++    private static final String BRAND_BAGUETTE_NAME = "Baguette"; // Baguette - Rebrand
  
      private static final String BUILD_DEV = "DEV";
  
