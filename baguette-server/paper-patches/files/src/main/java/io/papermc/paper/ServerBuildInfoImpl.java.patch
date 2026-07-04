@@ -1,26 +1,26 @@
 --- a/src/main/java/io/papermc/paper/ServerBuildInfoImpl.java
 +++ b/src/main/java/io/papermc/paper/ServerBuildInfoImpl.java
-@@ -38,6 +_,7 @@
- 
+@@ -39,6 +_,7 @@
      private static final String BRAND_PAPER_NAME = "Paper";
-     private static final String BRAND_CANVAS_NAME = "Canvas"; // Canvas - Rebrand
+     // Canvas start - Rebrand
+     private static final String BRAND_CANVAS_NAME = "Canvas";
 +    private static final String BRAND_BAGUETTE_NAME = "Baguette"; // Baguette - Rebrand
  
-     private static final String BUILD_DEV = "DEV";
- 
-@@ -49,9 +_,9 @@
+     // private static final Key BRAND_CANVAS_ID = Key.key("canvasmc", "canvas");
+     // private static final Key BRAND_FOLIA_ID = Key.key("papermc", "folia");
+@@ -54,9 +_,9 @@
          this(
              getManifestAttribute(manifest, ATTRIBUTE_BRAND_ID)
                  .map(Key::key)
--                .orElse(BRAND_CANVAS_ID), // Folia // Canvas - Rebrand
-+                .orElse(BRAND_BAGUETTE_ID), // Folia // Canvas - Rebrand // Baguette - Rebrand - the relevant BRAND_BAGUETTE_ID sits in paper-api, check the patches there!
+-                .orElse(BRAND_CANVAS_ID), // Canvas - Rebrand
++                .orElse(BRAND_BAGUETTE_ID), // Canvas - Rebrand // Baguette - Rebrand - the relevant BRAND_BAGUETTE_ID sits in paper-api, check the patches there!
              getManifestAttribute(manifest, ATTRIBUTE_BRAND_NAME)
--                .orElse(BRAND_CANVAS_NAME), // Folia // Canvas - Rebrand
-+                .orElse(BRAND_BAGUETTE_NAME), // Folia // Canvas - Rebrand // Baguette - Rebrand
+-                .orElse(BRAND_CANVAS_NAME), // Canvas - Rebrand
++                .orElse(BRAND_BAGUETTE_NAME), // Canvas - Rebrand // Baguette - Rebrand
              SharedConstants.getCurrentVersion().id(),
              SharedConstants.getCurrentVersion().name(),
              getManifestAttribute(manifest, ATTRIBUTE_BUILD_NUMBER)
-@@ -72,7 +_,7 @@
+@@ -77,7 +_,7 @@
  
      @Override
      public boolean isBrandCompatible(final @NotNull Key brandId) {

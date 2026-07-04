@@ -38,17 +38,12 @@ paperweight {
             // An important behavior change compared to paperweight in regards to the minecraft AT file is the added possibility to specify ats for libraries instead of having to patch them manually.
             outputDir = file("paper-api")
         }
-        patchRepo("foliaApi") {
-            upstreamPath = "folia-api"
-            patchesDir = file("baguette-api/folia-patches")
-            outputDir = file("folia-api")
-        }
         patchDir("canvasApi") {
             upstreamPath = "canvas-api"
-            excludes = listOf("build.gradle.kts", "build.gradle.kts.patch", "paper-patches", "folia-patches")
+            excludes = listOf("build.gradle.kts", "build.gradle.kts.patch", "paper-patches")
             patchesDir = file("baguette-api/canvas-patches")
             outputDir = file("canvas-api")
-	    }
+        }
     }
 }
 
