@@ -11,7 +11,7 @@ jobs:
     env:
       PLUGIN_ID: "io.canvasmc.weaver.patcher"
       FILE_PATH: "build.gradle.kts"
-      UPSTREAM_BRANCH: "ver/26.1.2"
+      UPSTREAM_BRANCH: "main"
     steps:
       - name: Checkout repo
         uses: actions/checkout@v6
@@ -120,7 +120,6 @@ jobs:
           # We apply twice here in case build files conflict, before reporting apply as failed
           ./gradlew applyAllPatches || echo "APPLY_FAILED=true" >> $GITHUB_ENV
           ./gradlew rebuildPaperApiPatches
-          ./gradlew rebuildFoliaApiPatches
           ./gradlew rebuildAllServerPatches
           ./gradlew compileJava || echo "BUILD_FAILED=true" >> $GITHUB_ENV
         continue-on-error: true
