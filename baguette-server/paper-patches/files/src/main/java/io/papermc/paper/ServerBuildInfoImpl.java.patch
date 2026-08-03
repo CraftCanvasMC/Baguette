@@ -1,6 +1,6 @@
 --- a/src/main/java/io/papermc/paper/ServerBuildInfoImpl.java
 +++ b/src/main/java/io/papermc/paper/ServerBuildInfoImpl.java
-@@ -39,6 +_,7 @@
+@@ -41,6 +_,7 @@
      private static final String BRAND_PAPER_NAME = "Paper";
      // Canvas start - Rebrand
      private static final String BRAND_CANVAS_NAME = "Canvas";
@@ -8,7 +8,7 @@
  
      // private static final Key BRAND_CANVAS_ID = Key.key("canvasmc", "canvas");
      // private static final Key BRAND_FOLIA_ID = Key.key("papermc", "folia");
-@@ -54,9 +_,9 @@
+@@ -56,9 +_,9 @@
          this(
              getManifestAttribute(manifest, ATTRIBUTE_BRAND_ID)
                  .map(Key::key)
@@ -20,7 +20,7 @@
              SharedConstants.getCurrentVersion().id(),
              SharedConstants.getCurrentVersion().name(),
              getManifestAttribute(manifest, ATTRIBUTE_BUILD_NUMBER)
-@@ -77,7 +_,7 @@
+@@ -80,7 +_,7 @@
  
      @Override
      public boolean isBrandCompatible(final @NotNull Key brandId) {
