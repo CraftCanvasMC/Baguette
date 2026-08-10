@@ -1,6 +1,6 @@
 --- a/src/main/java/io/papermc/paper/ServerBuildInfo.java
 +++ b/src/main/java/io/papermc/paper/ServerBuildInfo.java
-@@ -28,6 +_,12 @@
+@@ -26,6 +_,12 @@
       */
      Key BRAND_CANVAS_ID = Key.key("canvasmc", "canvas");
      // Canvas end - Rebrand
